@@ -1,4 +1,4 @@
-package tracker;
+package tracker.exceptions;
 
 public class ManagerSaveException extends RuntimeException {
 

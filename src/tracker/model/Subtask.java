@@ -1,7 +1,7 @@
 package tracker.model;
 
-import tracker.StatusTask;
-import tracker.TaskType;
+import tracker.modelParametrs.StatusTask;
+import tracker.modelParametrs.TaskType;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

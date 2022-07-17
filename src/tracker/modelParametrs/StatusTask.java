@@ -1,4 +1,4 @@
-package tracker;
+package tracker.modelParametrs;
 
 public enum StatusTask {
     NEW,

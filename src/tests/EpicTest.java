@@ -1,6 +1,6 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tracker.StatusTask;
+import tracker.modelParametrs.StatusTask;
 import tracker.controllers.Managers;
 import tracker.controllers.TaskManager;
 import tracker.model.Epic;
@@ -84,7 +84,4 @@ class EpicTest {
         assertNotNull(epic.getStatus());
         assertEquals(StatusTask.IN_PROGRESS,epic.getStatus());
     }
-
-
-
 }

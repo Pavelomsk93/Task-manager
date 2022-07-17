@@ -1,6 +1,6 @@
 package tracker.controllers;
 
-import tracker.StatusTask;
+import tracker.modelParametrs.StatusTask;
 import tracker.model.Epic;
 import tracker.model.Subtask;
 import tracker.model.Task;

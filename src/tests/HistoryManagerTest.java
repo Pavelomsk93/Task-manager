@@ -1,6 +1,6 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tracker.StatusTask;
+import tracker.modelParametrs.StatusTask;
 import tracker.controllers.HistoryManager;
 import tracker.controllers.InMemoryTaskManager;
 import tracker.controllers.Managers;
@@ -45,7 +45,6 @@ class HistoryManagerTest {
         taskManager.createSubtask(subtask, StatusTask.NEW);
         taskManager.createSubtask(subtask2,StatusTask.NEW);
     }
-
 
     @Test
     void shouldBeGetHistory(){
@@ -115,15 +114,4 @@ class HistoryManagerTest {
         assertEquals(5,historyManager.getHistory().size());
         assertEquals(task2,historyManager.getHistory().get(2));
     }
-
-
-
-
-
-
-
-
-
-
-
 }

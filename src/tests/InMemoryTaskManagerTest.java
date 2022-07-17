@@ -10,6 +10,4 @@ public class InMemoryTaskManagerTest extends TaskManagerTest <InMemoryTaskManage
     void updateTaskManager() {
         taskManager = Managers.getDefault();
     }
-
-
 }
