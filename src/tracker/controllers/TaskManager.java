@@ -5,7 +5,7 @@ import tracker.model.Epic;
 import tracker.model.Subtask;
 import tracker.model.Task;
 import java.util.List;
-import java.util.Set;
+
 
 public interface TaskManager {
 
@@ -47,7 +47,7 @@ public interface TaskManager {
 
     List<Task> history();
 
-    Set<Task> getPrioritizedTasks();
+    List<Task> getPrioritizedTasks();
 
     void validatorTimeTasks(Task task);
 

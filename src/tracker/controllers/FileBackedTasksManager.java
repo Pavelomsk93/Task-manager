@@ -20,9 +20,11 @@ public class FileBackedTasksManager extends InMemoryTaskManager  {
 
     private final File file;
     private final static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy;HH:mm");
+    public FileBackedTasksManager(){}
     public FileBackedTasksManager(File file) {
         this.file = file;
     }
+
 
     public static void main(String[] args) {
         TaskManager taskManagerFile = Managers.getFileBacked();
@@ -195,12 +197,12 @@ public class FileBackedTasksManager extends InMemoryTaskManager  {
     }
 
     @Override
-    public Set<Task> getPrioritizedTasks(){
+    public List<Task> getPrioritizedTasks(){
         save();
         return super.getPrioritizedTasks();
     }
 
-    private void save() {
+    protected void save() {
         try (final BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file, StandardCharsets.UTF_8))) {
             bufferedWriter.write("id,type,name,status,description,startTime,duration,epic");
             bufferedWriter.newLine();
