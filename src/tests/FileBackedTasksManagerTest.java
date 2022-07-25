@@ -20,13 +20,13 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 import static tracker.controllers.FileBackedTasksManager.loadFromFile;
 
-public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager> {
+ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager> {
 
 
     @BeforeEach
     void updateTaskManager() {
         Path path = Paths.get("src\\tracker\\resources\\tasks.csv");
-        taskManager = Managers.getFileBacked();
+        taskManager = new FileBackedTasksManager(new File("src\\tracker\\resources\\tasks.csv"));
         File file = taskManager.getFile();
         try {
             if (file.exists()) {
@@ -46,9 +46,9 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
         Epic epic = new Epic("Название задачи 1", "Описание задачи 1");
         taskManager.createEpic(epic);
         Subtask subtask = new Subtask("Название подзадачи 1", "Описание задачи 1", LocalDateTime.of(2022, 10, 20, 12, 0),
-                Duration.ofMinutes(90), epic);
+                90,1);
         Subtask subtask2 = new Subtask("Название подзадачи 2", "Описание задачи 2", LocalDateTime.of(2022, 10, 20, 15, 0),
-                Duration.ofMinutes(90), epic);
+                90, 1);
         taskManager.createSubtask(subtask, StatusTask.NEW);
         taskManager.createSubtask(subtask2, StatusTask.NEW);
         TaskManager managerFile = loadFromFile(new File("src\\tracker\\resources\\tasks.csv"));
@@ -75,9 +75,9 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
         Epic epic = new Epic("Название задачи 1", "Описание задачи 1");
         taskManager.createEpic(epic);
         Subtask subtask = new Subtask("Название подзадачи 1", "Описание задачи 1", LocalDateTime.of(2022, 10, 20, 12, 0),
-                Duration.ofMinutes(90), epic);
+                90, 1);
         Subtask subtask2 = new Subtask("Название подзадачи 2", "Описание задачи 2", LocalDateTime.of(2022, 10, 20, 15, 0),
-                Duration.ofMinutes(90), epic);
+                90, 1);
         taskManager.createSubtask(subtask, StatusTask.NEW);
         taskManager.createSubtask(subtask2, StatusTask.NEW);
         TaskManager managerFile = loadFromFile(new File("src\\tracker\\resources\\tasks.csv"));

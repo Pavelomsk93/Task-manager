@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.Objects;
 
 public class Epic extends Task {
-    private final List<Subtask> subtaskList = new ArrayList<>();
-    protected LocalDateTime startTime ;
-    protected Duration duration ;
+    private final transient List<Subtask> subtaskList = new ArrayList<>();
+
+
 
     public Epic(String title, String description) {
        super(title,description);
@@ -22,7 +22,7 @@ public class Epic extends Task {
     }
 
     public Epic(String title, String description, int id, StatusTask status ,LocalDateTime startTime,
-                Duration duration) {
+                int duration) {
         super(title,description,id,status);
         this.startTime = startTime;
         this.duration = duration;
@@ -37,16 +37,18 @@ public class Epic extends Task {
     }
 
     public StatusTask getStatus() {
-        return status;
+        return statusTask;
     }
 
-    public void setStatus(StatusTask status) {
-        this.status = status;
+    public void setStatus(StatusTask statusTask) {
+        this.statusTask = statusTask;
     }
 
     public List<Subtask> getSubTaskList() {
         return subtaskList;
     }
+
+
 
     public void addSubtaskList(Subtask subtask) {
         subtaskList.add(subtask);
@@ -80,11 +82,12 @@ public class Epic extends Task {
         }
     }
 
-    public Duration getDuration() {
+    public int getDuration() {
         if (getStartTime() != null && getEndTime() != null) {
-            return Duration.between(getStartTime(), getEndTime());
+            Duration time = Duration.between(getStartTime(), getEndTime());
+            return (int)time.toSeconds()/60;
         }else{
-            return null;
+            return 0;
         }
     }
 
@@ -108,7 +111,7 @@ public class Epic extends Task {
                 "title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", id=" + id +
-                ", status='" + status + '\'' +
+                ", statusTask='" + statusTask + '\'' +
                 '}';
     }
 }

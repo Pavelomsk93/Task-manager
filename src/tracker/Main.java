@@ -1,63 +1,64 @@
 package tracker;
 
-
 import tracker.controllers.*;
 import tracker.model.Epic;
 import tracker.model.Subtask;
 import tracker.model.Task;
 import tracker.modelParametrs.StatusTask;
+import tracker.servers.HttpTaskServer;
+import tracker.servers.KVServer;
 
-import java.time.Duration;
+import java.io.IOException;
 import java.time.LocalDateTime;
-
+import java.time.Month;
 
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        KVServer kvServer = new KVServer();
+        kvServer.start();
+        HttpTaskServer taskServer = new HttpTaskServer();
+        taskServer.start();
 
         TaskManager taskManager = Managers.getDefault();
+        Task taskOne = new Task("task 1", "Описание task 1",
+                 LocalDateTime.of(2022, 5, 1,   0, 0),90);
 
-        Task task = new Task("Уехать","Приехать",LocalDateTime.of(2022,7,15,10,0),Duration.ofMinutes(90));
-        Epic epic = new Epic("Переезд", "Увезти вещи");
+        Task taskTwo = new Task("task 1", "Описание task 1",
+                LocalDateTime.of(2022, 5, 2,   0, 0),90);
 
-        Epic epics = new Epic("Купить продукты", "Сходить в Магнит");
+        Epic epicOne  = new Epic("Epic 1", "Описание Epic 1");
+        Epic epicTwo  = new Epic("Epic 2", "Описание Epic 2");
 
-        Subtask subtask = new Subtask("Заказать машину", "Позвонить по номеру телефона",null,
-                null, epic);
-        Subtask subtasks = new Subtask("Загрузить машину", "Поднести вещи к машине",LocalDateTime.of(2022,7,15,23,0),
-                Duration.ofMinutes(90), epic);
-        Subtask laundry = new Subtask("Загрузить стиралку", "Переложить вещи из корзины",LocalDateTime.of(2022,7,15,
-                14,0),
-                Duration.ofMinutes(90), epic);
-        Subtask difference = new Subtask("Загрузить ", "Переложить вещи ",null, null, epic);
-        Subtask lau = new Subtask("Загрузить стиралку", "Переложить",LocalDateTime.of(2022,7,15,
-                16,0),
-                Duration.ofMinutes(90), epic);
+        Subtask subtaskOne = new Subtask("Subtask 1", "Описание Subtask 1",
+                  LocalDateTime.of(2022, Month.MAY, 2, 15, 0),90, 3);
+        Subtask subtaskTwo = new Subtask("Subtask 2", "Описание Subtask 2",
+                 LocalDateTime.of(2022, Month.MAY, 3, 15, 0),90, 3);
 
-        taskManager.createTask(task);
-
-        taskManager.createEpic(epic);
-        taskManager.createEpic(epics);
-        taskManager.createSubtask(subtask, StatusTask.NEW);
-        taskManager.createSubtask(subtasks, StatusTask.NEW);
-        taskManager.createSubtask(laundry,StatusTask.NEW);
-        taskManager.updateSubtask(subtask, StatusTask.DONE);
-        taskManager.updateSubtask(subtasks, StatusTask.DONE);
-        taskManager.createSubtask(difference,StatusTask.NEW);
-        taskManager.createSubtask(lau,StatusTask.NEW);
+        taskManager.createTask(taskOne);
+        taskManager.createTask(taskTwo);
+        taskManager.createEpic(epicOne);
+        taskManager.createEpic(epicTwo);
+        taskManager.createSubtask(subtaskOne,StatusTask.NEW);
+        taskManager.createSubtask(subtaskTwo,StatusTask.NEW);
+        taskManager.getTask(1);
+        taskManager.getTask(2);
         taskManager.getEpic(3);
-        taskManager.getEpic(2);
-        System.out.println(taskManager.history());
-        taskManager.getSubtask(4);
-        System.out.println(taskManager.getEpic(2).getStartTime());
-        System.out.println(taskManager.history());
+        taskManager.getEpic(4);
         taskManager.getSubtask(5);
         taskManager.getSubtask(6);
-        taskManager.getSubtask(6);
-        taskManager.getSubtask(4);
-        taskManager.getSubtask(6);
-        taskManager.deleteAllTask();
+        System.out.println("История");
+        System.out.println(taskManager.history());
+        System.out.println("\nПриоритетные задачи");
         System.out.println(taskManager.getPrioritizedTasks());
+        System.out.println("\nВсе задачи");
+        System.out.println(taskManager.getAllTask());
+        System.out.println("\nВсе эпики'");
+        System.out.println(taskManager.getAllEpic());
+        System.out.println("\nВсе сабтаски");
+        System.out.println(taskManager.getAllSubtask());
+        taskServer.stop();
+        kvServer.stop();
     }
 }

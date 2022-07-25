@@ -27,8 +27,37 @@ public class KVServer {
         server.createContext("/load", this::load);
     }
 
-    private void load(HttpExchange h) {
-        // TODO Добавьте получение значения по ключу
+    private void load(HttpExchange h) throws IOException {
+        try  {
+            System.out.println("\n/load");
+            if (!hasAuth(h)) {
+                System.out.println("Запрос неавторизован, нужен параметр в query API_KEY со значением апи-ключа");
+                h.sendResponseHeaders(403, 0);
+                return;
+            }
+
+            if ("GET".equals(h.getRequestMethod())) {
+                String key = h.getRequestURI().getPath().substring("/load/".length());
+                if (key.isEmpty()) {
+                    System.out.println("Key для сохранения пустой. Key указывается в пути: /load/{key}");
+                    h.sendResponseHeaders(400, 0);
+                    return;
+                }
+                String value = data.get(key);
+                if (value != null) {
+                    sendText(h, value);
+                    System.out.println("Значение для ключа " + key + " успешно получено!");
+                } else {
+                    System.out.println("Значение для ключа " + key + " не найдено");
+                    h.sendResponseHeaders(404, 0);
+                }
+            } else {
+                System.out.println("/load ждут GET запрос, а получил: " + h.getRequestMethod());
+                h.sendResponseHeaders(405, 0);
+            }
+        }finally {
+            h.close();
+        }
     }
 
     private void save(HttpExchange h) throws IOException {
@@ -103,5 +132,9 @@ public class KVServer {
         h.getResponseHeaders().add("Content-Type", "application/json");
         h.sendResponseHeaders(200, resp.length);
         h.getResponseBody().write(resp);
+    }
+
+    public void stop() {
+        server.stop(1);
     }
 }

@@ -12,7 +12,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-abstract class TaskManagerTest<T extends TaskManager> {
+ abstract class TaskManagerTest<T extends TaskManager> {
     T taskManager;
 
 
@@ -28,7 +28,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void shouldBeAddTaskAfterCreateNewTask() {
         Task task = new Task("Название задачи 1", "Описание задачи 1", LocalDateTime.of(2022, 10, 20, 12, 0),
-                Duration.ofMinutes(90));
+                90);
         int id = taskManager.createTask(task);
         Task savedTask = taskManager.getTask(id);
         List<Task> tasks = taskManager.getAllTask();
@@ -40,9 +40,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void shouldBeAddedToTheTaskListAfterCreatingMultipleTasks() {
         Task task = new Task("Название задачи 1", "Описание задачи 1", LocalDateTime.of(2022, 10, 20, 12, 0),
-                Duration.ofMinutes(90));
+                90);
         Task task2 = new Task("Название задачи 2", "Описание задачи 2", LocalDateTime.of(2022, 10, 20, 14, 0),
-                Duration.ofMinutes(90));
+                90);
         int id = taskManager.createTask(task);
         int id2 = taskManager.createTask(task2);
         Task savedTask = taskManager.getTask(id);
@@ -64,9 +64,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void shouldBeDeleteToTheTaskListAfterCreatingMultipleTasks() {
         Task task = new Task("Название задачи 1", "Описание задачи 1", LocalDateTime.of(2022, 10, 20, 12, 0),
-                Duration.ofMinutes(90));
+                90);
         Task task2 = new Task("Название задачи 2", "Описание задачи 2", LocalDateTime.of(2022, 10, 20, 14, 0),
-                Duration.ofMinutes(90));
+                90);
         taskManager.createTask(task);
         taskManager.createTask(task2);
         taskManager.deleteAllTask();
@@ -84,7 +84,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void shouldBeTaskReceivedAfterTheIdIsPassed() {
         Task task = new Task("Название задачи 1", "Описание задачи 1", LocalDateTime.of(2022, 10, 20, 12, 0),
-                Duration.ofMinutes(90));
+                90);
         int id = taskManager.createTask(task);
         Task savedTask = taskManager.getTask(id);
         assertEquals(task, savedTask);
@@ -94,7 +94,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void shouldBeTaskNoReceivedAfterTheIdIsPassed() {
         Task task = new Task("Название задачи 1", "Описание задачи 1", LocalDateTime.of(2022, 10, 20, 12, 0),
-                Duration.ofMinutes(90));
+                90);
         taskManager.createTask(task);
         Task noTask = taskManager.getTask(2);
         assertNull(noTask);
@@ -103,9 +103,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void shouldBeTaskDeletedAfterTheIdIsPassed() {
         Task task = new Task("Название задачи 1", "Описание задачи 1", LocalDateTime.of(2022, 10, 20, 12, 0),
-                Duration.ofMinutes(90));
+                90);
         Task task2 = new Task("Название задачи 2", "Описание задачи 2", LocalDateTime.of(2022, 10, 20, 14, 0),
-                Duration.ofMinutes(90));
+                90);
         int id = taskManager.createTask(task);
         taskManager.createTask(task2);
         taskManager.deleteTask(id);
@@ -116,9 +116,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void shouldBeTaskNoDeletedAfterTheIdIsPassed() {
         Task task = new Task("Название задачи 1", "Описание задачи 1", LocalDateTime.of(2022, 10, 20, 12, 0),
-                Duration.ofMinutes(90));
+                90);
         Task task2 = new Task("Название задачи 2", "Описание задачи 2", LocalDateTime.of(2022, 10, 20, 14, 0),
-                Duration.ofMinutes(90));
+                90);
         taskManager.createTask(task);
         taskManager.createTask(task2);
         taskManager.deleteTask(3);
@@ -233,7 +233,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         Epic epic = new Epic("Название задачи 1", "Описание задачи 1");
         taskManager.createEpic(epic);
         Subtask subtask = new Subtask("Название подзадачи 1", "Описание задачи 1", LocalDateTime.of(2022, 10, 20, 12, 0),
-                Duration.ofMinutes(90), epic);
+                90, 1);
         int id = taskManager.createSubtask(subtask, StatusTask.NEW);
         Subtask savedSubtask = taskManager.getSubtask(id);
         List<Subtask> subtasks = taskManager.getAllSubtask();
@@ -245,10 +245,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void shouldBeAddedToTheSubtaskListAfterCreatingMultipleSubtasks() {
         Epic epic = new Epic("Название задачи 1", "Описание задачи 1");
+        taskManager.createEpic(epic);
         Subtask subtask = new Subtask("Название подзадачи 1", "Описание задачи 1", LocalDateTime.of(2022, 10, 20, 12, 0),
-                Duration.ofMinutes(90), epic);
+                90, 1);
         Subtask subtask2 = new Subtask("Название подзадачи 2", "Описание задачи 2", LocalDateTime.of(2022, 10, 20, 15, 0),
-                Duration.ofMinutes(90), epic);
+                90, 1);
         int id = taskManager.createSubtask(subtask, StatusTask.NEW);
         int id2 = taskManager.createSubtask(subtask2, StatusTask.NEW);
         Subtask savedSubtask = taskManager.getSubtask(id);
@@ -270,10 +271,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void shouldBeDeleteToTheSubtaskListAfterCreatingMultipleSubtasks() {
         Epic epic = new Epic("Название задачи 1", "Описание задачи 1");
+        taskManager.createEpic(epic);
         Subtask subtask = new Subtask("Название подзадачи 1", "Описание задачи 1", LocalDateTime.of(2022, 10, 20, 12, 0),
-                Duration.ofMinutes(90), epic);
+                90, 1);
         Subtask subtask2 = new Subtask("Название подзадачи 2", "Описание задачи 2", LocalDateTime.of(2022, 10, 20, 15, 0),
-                Duration.ofMinutes(90), epic);
+                90, 1);
         taskManager.createSubtask(subtask, StatusTask.NEW);
         taskManager.createSubtask(subtask2, StatusTask.NEW);
         taskManager.deleteAllSubtask();
@@ -291,8 +293,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void shouldBeSubtaskReceivedAfterTheIdIsPassed() {
         Epic epic = new Epic("Название задачи 1", "Описание задачи 1");
+        taskManager.createEpic(epic);
         Subtask subtask = new Subtask("Название подзадачи 1", "Описание задачи 1", LocalDateTime.of(2022, 10, 20, 12, 0),
-                Duration.ofMinutes(90), epic);
+                90, 1);
         int id = taskManager.createSubtask(subtask, StatusTask.NEW);
         Subtask savedSubtask = taskManager.getSubtask(id);
         assertEquals(subtask, savedSubtask);
@@ -302,23 +305,25 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void shouldBeSubtaskNoReceivedAfterTheIdIsPassed() {
         Epic epic = new Epic("Название задачи 1", "Описание задачи 1");
+        taskManager.createEpic(epic);
         Subtask subtask = new Subtask("Название подзадачи 1", "Описание задачи 1", LocalDateTime.of(2022, 10, 20, 12, 0),
-                Duration.ofMinutes(90), epic);
+                90, 1);
         taskManager.createSubtask(subtask, StatusTask.NEW);
-        Subtask noSubtask = taskManager.getSubtask(2);
+        Subtask noSubtask = taskManager.getSubtask(3);
         assertNull(noSubtask);
     }
 
     @Test
     void shouldBeSubtaskDeletedAfterTheIdIsPassed() {
         Epic epic = new Epic("Название задачи 1", "Описание задачи 1");
+        taskManager.createEpic(epic);
         Subtask subtask = new Subtask("Название подзадачи 1", "Описание задачи 1", LocalDateTime.of(2022, 10, 20, 12, 0),
-                Duration.ofMinutes(90), epic);
+                90, 1);
         Subtask subtask2 = new Subtask("Название подзадачи 2", "Описание задачи 2", LocalDateTime.of(2022, 10, 20, 15, 0),
-                Duration.ofMinutes(90), epic);
+                90, 1);
         int id = taskManager.createSubtask(subtask, StatusTask.NEW);
         taskManager.createSubtask(subtask2, StatusTask.NEW);
-        taskManager.deleteSubtask(id, epic);
+        taskManager.deleteSubtask(id, epic.getId());
         assertNotNull(taskManager.getAllSubtask());
         assertEquals(1, taskManager.getAllSubtask().size());
     }
@@ -328,12 +333,12 @@ abstract class TaskManagerTest<T extends TaskManager> {
         Epic epic = new Epic("Название задачи 1", "Описание задачи 1");
         taskManager.createEpic(epic);
         Subtask subtask = new Subtask("Название подзадачи 1", "Описание задачи 1", LocalDateTime.of(2022, 10, 20, 12, 0),
-                Duration.ofMinutes(90), epic);
+                90, 1);
         Subtask subtask2 = new Subtask("Название подзадачи 2", "Описание задачи 2", LocalDateTime.of(2022, 10, 20, 15, 0),
-                Duration.ofMinutes(90), epic);
+                90, 1);
         taskManager.createSubtask(subtask, StatusTask.NEW);
         taskManager.createSubtask(subtask2, StatusTask.NEW);
-        taskManager.deleteSubtask(4, epic);
+        taskManager.deleteSubtask(4, epic.getId());
         assertEquals(2, taskManager.getAllSubtask().size());
         assertNotNull(taskManager.getAllSubtask());
     }
@@ -354,15 +359,15 @@ abstract class TaskManagerTest<T extends TaskManager> {
         taskManager.createEpic(epic);
         taskManager.createEpic(epic2);
         Task task = new Task("Название задачи 1", "Описание задачи 1", LocalDateTime.of(2022, 10, 20, 12, 0),
-                Duration.ofMinutes(90));
+                90);
         Task task2 = new Task("Название задачи 2", "Описание задачи 2", LocalDateTime.of(2022, 10, 20, 16, 0),
-                Duration.ofMinutes(90));
+                90);
         taskManager.createTask(task);
         taskManager.createTask(task2);
         Subtask subtask = new Subtask("Название подзадачи 1", "Описание задачи 1", null,
-                null, epic);
+                0, 1);
         Subtask subtask2 = new Subtask("Название подзадачи 2", "Описание задачи 2", LocalDateTime.of(2022, 10, 20, 14, 0),
-                Duration.ofMinutes(90), epic);
+                90, 1);
         taskManager.createSubtask(subtask, StatusTask.NEW);
         taskManager.createSubtask(subtask2, StatusTask.NEW);
         assertEquals(4, taskManager.getPrioritizedTasks().size());
@@ -373,10 +378,10 @@ abstract class TaskManagerTest<T extends TaskManager> {
         Epic epic = new Epic("Название задачи 1", "Описание задачи 1");
         taskManager.createEpic(epic);
         Subtask subtask = new Subtask("Название подзадачи 1", "Описание задачи 1", LocalDateTime.of(2022, 10, 20, 12, 0),
-                Duration.ofMinutes(90), epic);
+                90, 1);
         int id = taskManager.createSubtask(subtask, StatusTask.NEW);
         Subtask subtask2 = new Subtask("Название подзадачи 2", "Описание задачи 2", LocalDateTime.of(2022, 10, 20, 13, 0),
-                Duration.ofMinutes(90), epic);
+                90, 1);
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> taskManager.createSubtask(subtask2, StatusTask.NEW));
         assertEquals("Даты пересекаются у задач с номерами: " + id + " и " + subtask2.getId(), ex.getMessage());
     }

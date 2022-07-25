@@ -9,7 +9,7 @@ import tracker.model.Epic;
 import tracker.model.Subtask;
 import tracker.model.Task;
 
-import java.time.Duration;
+
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,15 +33,15 @@ class HistoryManagerTest {
         taskManager.createEpic(epic);
         taskManager.createEpic(epic2);
         task = new Task("Название задачи 1","Описание задачи 1", LocalDateTime.of(2022,10,20,12,0),
-                Duration.ofMinutes(90));
+                90);
         task2 = new Task("Название задачи 2","Описание задачи 2", LocalDateTime.of(2022,10,20,16,0),
-                Duration.ofMinutes(90));
+                90);
         taskManager.createTask(task);
         taskManager.createTask(task2);
         subtask = new Subtask("Название подзадачи 1","Описание задачи 1", null,
-                null,epic);
+                0,1);
         subtask2 = new Subtask("Название подзадачи 2","Описание задачи 2", LocalDateTime.of(2022,10,20,14,0),
-                Duration.ofMinutes(90),epic);
+                90,1);
         taskManager.createSubtask(subtask, StatusTask.NEW);
         taskManager.createSubtask(subtask2,StatusTask.NEW);
     }

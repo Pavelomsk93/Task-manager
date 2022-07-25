@@ -13,38 +13,38 @@ public class Task {
     protected String title;
     protected String description;
     protected int id;
-    protected StatusTask status;
-    protected TaskType type;
+    protected StatusTask statusTask ;
+    protected TaskType typeTask;
     protected LocalDateTime startTime;
-    protected Duration duration ;
+    protected int duration ;
 
     public Task(String title, String description) {
         this.title = title;
         this.description = description;
-        this.status = StatusTask.NEW;
+        statusTask = StatusTask.NEW;
     }
 
-    public Task(String title, String description, int id, StatusTask status) {
+    public Task(String title, String description, int id, StatusTask statusTask) {
         this.title = title;
         this.description = description;
-        this.status = status;
+        this.statusTask = statusTask;
         this.id = id;
         this.startTime =getStartTime();
         this.duration = getDuration();
     }
 
-    public Task(String title, String description,LocalDateTime startTime,Duration duration) {
+    public Task(String title, String description,LocalDateTime startTime,int duration) {
         this.title = title;
         this.description = description;
-        this.status = StatusTask.NEW;
         this.startTime = startTime;
         this.duration = duration;
+        statusTask =  StatusTask.NEW;
     }
 
-    public Task(String title, String description,int id,StatusTask status,LocalDateTime startTime,Duration duration) {
+    public Task(String title, String description,int id,StatusTask status,LocalDateTime startTime,int duration) {
         this.title = title;
         this.description = description;
-        this.status = status;
+        this.statusTask = status;
         this.id = id;
         this.startTime = startTime;
         this.duration = duration;
@@ -67,11 +67,11 @@ public class Task {
     }
 
     public StatusTask getStatus() {
-        return status;
+        return statusTask;
     }
 
     public void setStatus(StatusTask status) {
-        this.status = status;
+        this.statusTask = status;
     }
 
     public TaskType getTaskType(){
@@ -80,7 +80,7 @@ public class Task {
 
     public LocalDateTime getEndTime(){
         if(startTime!=null) {
-            return startTime.plus(duration);
+            return startTime.plusMinutes(getDuration());
         }else{
             return null;
         }
@@ -90,7 +90,11 @@ public class Task {
             return startTime;
     }
 
-    public Duration getDuration(){
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public int getDuration(){
         return duration;
     }
 
@@ -117,12 +121,12 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return id == task.id && Objects.equals(title, task.title) && Objects.equals(description, task.description) && Objects.equals(status, task.status);
+        return id == task.id && Objects.equals(title, task.title) && Objects.equals(description, task.description) && Objects.equals(statusTask, task.statusTask);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, description, id, status);
+        return Objects.hash(title, description, id, statusTask);
     }
 
     @Override
@@ -131,7 +135,7 @@ public class Task {
                 "title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", id=" + id +
-                ", status='" + status + '\'' +
+                ", statusTask='" + statusTask + '\'' +
                 '}';
     }
 }
