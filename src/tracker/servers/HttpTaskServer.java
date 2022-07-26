@@ -27,7 +27,7 @@ public class HttpTaskServer {
     private static TaskManager manager;
     private static final Gson gson = new GsonBuilder()
             .setPrettyPrinting()
-            .registerTypeAdapter(LocalDateTime.class,new LocalDateTimeAdapter())
+            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
             .create();
     private final HttpServer httpServer;
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
@@ -36,11 +36,11 @@ public class HttpTaskServer {
 
     public static void main(String[] args) throws IOException {
         HttpTaskServer taskServer = new HttpTaskServer();
-        taskServer.start(); // запускаем сервер
+        taskServer.start();
     }
 
     public HttpTaskServer() throws IOException {
-        manager =  Managers.getDefault();
+        manager = Managers.getDefault();
 
         httpServer = HttpServer.create(new InetSocketAddress(PORT), 0);
         httpServer.createContext("/tasks", new TasksHandler());
@@ -49,22 +49,19 @@ public class HttpTaskServer {
         httpServer.createContext("/tasks/epic", new EpicHandler());
         httpServer.createContext("/tasks/history", new HistoryHandler());
         httpServer.createContext("/tasks/subtask/epic", new SubtasksByEpicHandler());
-
         System.out.println("HTTP-сервер запущен на " + PORT + " порту!");
     }
 
 
-
-    static class TaskHandler implements HttpHandler{
+    static class TaskHandler implements HttpHandler {
 
         @Override
         public void handle(HttpExchange httpExchange) throws IOException {
             InputStream inputStream = httpExchange.getRequestBody();
-            String path = httpExchange.getRequestURI().getPath(); // получение URI
-            String pathRequest = httpExchange.getRequestURI().getQuery(); // получение того, что после '?'
+            String path = httpExchange.getRequestURI().getPath();
+            String pathRequest = httpExchange.getRequestURI().getQuery();
             String requestMethod = httpExchange.getRequestMethod();
-            int pathLength = path.split("/").length; //олучение длины массима path после split
-
+            int pathLength = path.split("/").length;
             System.out.println("Обработка эндпоинта " + requestMethod + " /tasks/task");
             switch (requestMethod) {
                 case "GET":
@@ -159,17 +156,16 @@ public class HttpTaskServer {
         }
     }
 
-    static class EpicHandler implements HttpHandler{
+    static class EpicHandler implements HttpHandler {
 
         @Override
         public void handle(HttpExchange httpExchange) throws IOException {
             InputStream inputStream = httpExchange.getRequestBody();
-            String path = httpExchange.getRequestURI().getPath(); // получение URI
-            String pathRequest = httpExchange.getRequestURI().getQuery(); // получение того, что после '?'
+            String path = httpExchange.getRequestURI().getPath();
+            String pathRequest = httpExchange.getRequestURI().getQuery();
             String requestMethod = httpExchange.getRequestMethod();
-            int pathLength = path.split("/").length; //олучение длины массима path после split
+            int pathLength = path.split("/").length;
             System.out.println("Обработка эндпоинта " + requestMethod + " /tasks/epic");
-
             switch (requestMethod) {
                 case "GET":
                     if (path.endsWith("epic") && (pathLength == LENGTH_URI)) {
@@ -194,7 +190,6 @@ public class HttpTaskServer {
                         outputStream.close();
                     }
                     break;
-
                 case "POST":
                     try (inputStream) {
                         String body = new String(inputStream.readAllBytes(), DEFAULT_CHARSET);
@@ -216,7 +211,6 @@ public class HttpTaskServer {
                         }
                     }
                     break;
-
                 case "DELETE":
                     if (path.endsWith("epic") && (pathLength == LENGTH_URI)) {
                         httpExchange.sendResponseHeaders(200, 0);
@@ -243,7 +237,6 @@ public class HttpTaskServer {
                         outputStream.close();
                     }
                     break;
-
                 default:
                     httpExchange.sendResponseHeaders(404, 0);
                     try (OutputStream os = httpExchange.getResponseBody()) {
@@ -254,18 +247,16 @@ public class HttpTaskServer {
         }
     }
 
-    static class SubtaskHandler implements HttpHandler{
+    static class SubtaskHandler implements HttpHandler {
 
         @Override
         public void handle(HttpExchange httpExchange) throws IOException {
             InputStream inputStream = httpExchange.getRequestBody();
-            String path = httpExchange.getRequestURI().getPath(); // получение URI
-            String pathRequest = httpExchange.getRequestURI().getQuery(); // получение того, что после '?'
+            String path = httpExchange.getRequestURI().getPath();
+            String pathRequest = httpExchange.getRequestURI().getQuery();
             String requestMethod = httpExchange.getRequestMethod();
-            int pathLength = path.split("/").length; //олучение длины массима path после split
-
+            int pathLength = path.split("/").length;
             System.out.println("Обработка эндпоинта " + requestMethod + " /tasks/subtask");
-
             switch (requestMethod) {
                 case "POST":
                     try (inputStream) {
@@ -279,7 +270,7 @@ public class HttpTaskServer {
                             httpExchange.sendResponseHeaders(201, 0);
                             OutputStream outputStream = httpExchange.getResponseBody();
                             if (idSubtask) {
-                                manager.updateSubtask(subtask,subtask.getStatus());
+                                manager.updateSubtask(subtask, subtask.getStatus());
                                 outputStream.write((gson.toJson(subtask).getBytes()));
                             } else {
                                 manager.createSubtask(subtask, StatusTask.NEW);
@@ -292,7 +283,6 @@ public class HttpTaskServer {
                         httpExchange.sendResponseHeaders(400, 0);
                     }
                     break;
-
                 case "GET":
                     if (path.endsWith("subtask") && (pathLength == LENGTH_URI)) {
                         httpExchange.sendResponseHeaders(200, 0);
@@ -319,7 +309,6 @@ public class HttpTaskServer {
                         outputStream.close();
                     }
                     break;
-
                 case "DELETE":
                     if (path.endsWith("subtask") && (pathLength == LENGTH_URI)) {
                         httpExchange.sendResponseHeaders(200, 0);
@@ -334,7 +323,7 @@ public class HttpTaskServer {
                         int id = Integer.parseInt(pathRequest.split("=")[1]);
                         httpExchange.sendResponseHeaders(200, 0);
                         try (OutputStream outputStream = httpExchange.getResponseBody()) {
-                            manager.deleteSubtask(id,manager.getSubtask(id).getEpicId());
+                            manager.deleteSubtask(id, manager.getSubtask(id).getEpicId());
                             outputStream.write(("Subtask с id = " + id + " удалена").getBytes(DEFAULT_CHARSET));
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -362,10 +351,10 @@ public class HttpTaskServer {
 
         @Override
         public void handle(HttpExchange httpExchange) throws IOException {
-            String path = httpExchange.getRequestURI().getPath(); // получение URI
-            String pathRequest = httpExchange.getRequestURI().getQuery(); // получение того, что после '?'
+            String path = httpExchange.getRequestURI().getPath();
+            String pathRequest = httpExchange.getRequestURI().getQuery();
             String requestMethod = httpExchange.getRequestMethod();
-            int pathLength = path.split("/").length; //олучение длины массима path после split
+            int pathLength = path.split("/").length;
 
             System.out.println("Обработка эндпоинта " + requestMethod + " /tasks/subtask/epic");
 
@@ -385,26 +374,24 @@ public class HttpTaskServer {
                     OutputStream outputStream = httpExchange.getResponseBody();
                     outputStream.close();
                 }
-            }else{
-                    httpExchange.sendResponseHeaders(404, 0);
-                    try (OutputStream os = httpExchange.getResponseBody()) {
-                        os.write(("Данный метод не можем обработать.\n" +
-                                "Используйте метод 'GET'").getBytes());
-                    }
+            } else {
+                httpExchange.sendResponseHeaders(404, 0);
+                try (OutputStream os = httpExchange.getResponseBody()) {
+                    os.write(("Данный метод не можем обработать.\n" +
+                            "Используйте метод 'GET'").getBytes());
+                }
             }
         }
     }
 
-    static class HistoryHandler implements HttpHandler{
+    static class HistoryHandler implements HttpHandler {
 
         @Override
         public void handle(HttpExchange httpExchange) throws IOException {
-            String path = httpExchange.getRequestURI().getPath(); // получение URI
+            String path = httpExchange.getRequestURI().getPath();
             String requestMethod = httpExchange.getRequestMethod();
-            int pathLength = path.split("/").length; //олучение длины массима path после split
-
+            int pathLength = path.split("/").length;
             System.out.println("Обработка эндпоинта " + requestMethod + " /tasks/history");
-
             if (requestMethod.equals("GET")) {
                 if (path.endsWith("history") && (pathLength == LENGTH_URI)) {
                     httpExchange.sendResponseHeaders(200, 0);
@@ -420,12 +407,12 @@ public class HttpTaskServer {
                     OutputStream outputStream = httpExchange.getResponseBody();
                     outputStream.close();
                 }
-            }else{
-                    httpExchange.sendResponseHeaders(404, 0);
-                    try (OutputStream os = httpExchange.getResponseBody()) {
-                        os.write(("Данный метод не можем обработать.\n" +
-                                "Используйте методы 'GET'").getBytes());
-                    }
+            } else {
+                httpExchange.sendResponseHeaders(404, 0);
+                try (OutputStream os = httpExchange.getResponseBody()) {
+                    os.write(("Данный метод не можем обработать.\n" +
+                            "Используйте методы 'GET'").getBytes());
+                }
             }
         }
     }
@@ -434,9 +421,9 @@ public class HttpTaskServer {
 
         @Override
         public void handle(HttpExchange httpExchange) throws IOException {
-            String path = httpExchange.getRequestURI().getPath(); // получение URI
+            String path = httpExchange.getRequestURI().getPath();
             String requestMethod = httpExchange.getRequestMethod();
-            int pathLength = path.split("/").length; //олучение длины массима path после split
+            int pathLength = path.split("/").length;
 
             System.out.println("Обработка эндпоинта " + requestMethod + " /tasks");
 
@@ -455,16 +442,15 @@ public class HttpTaskServer {
                     OutputStream outputStream = httpExchange.getResponseBody();
                     outputStream.close();
                 }
-            }else{
-                    httpExchange.sendResponseHeaders(404, 0);
-                    try (OutputStream os = httpExchange.getResponseBody()) {
-                        os.write(("Данный метод не можем обработать.\n" +
-                                "Используйте методы 'GET'").getBytes());
-                    }
+            } else {
+                httpExchange.sendResponseHeaders(404, 0);
+                try (OutputStream os = httpExchange.getResponseBody()) {
+                    os.write(("Данный метод не можем обработать.\n" +
+                            "Используйте методы 'GET'").getBytes());
+                }
             }
         }
     }
-
 
     public void start() {
         System.out.println("Запускаем сервер на порту " + PORT);

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Epic extends Task {
-    private final transient List<Subtask> subtaskList = new ArrayList<>();
+    private final  List<Subtask> subtaskList = new ArrayList<>();
 
 
 

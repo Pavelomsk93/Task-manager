@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 public class Subtask extends Task {
 
-    private final int epicId;
+    private  int epicId;
 
 
     public Subtask(String title, String description,LocalDateTime startTime,int duration, int epicId) {
@@ -36,6 +36,10 @@ public class Subtask extends Task {
 
     public int getEpicId() {
         return epicId;
+    }
+
+    public void setEpicId(int id){
+        this.epicId = id;
     }
 
     public void setStatus(StatusTask statusTask) {

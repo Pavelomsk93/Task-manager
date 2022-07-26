@@ -61,10 +61,8 @@ public class KVTaskClient {
                 .build();
         try {
             final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() == 200) {
-                JsonElement jsonElement = JsonParser.parseString(response.body());
-                key = jsonElement.getAsString();
-            }
+            JsonElement jsonElement = JsonParser.parseString(response.body());
+            key = jsonElement.getAsString();
         } catch (NullPointerException | IOException | InterruptedException e) {
             System.out.println("KVServer не получил api_token");
         }

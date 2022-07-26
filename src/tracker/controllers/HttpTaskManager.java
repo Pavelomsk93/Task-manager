@@ -37,7 +37,7 @@ public class HttpTaskManager extends FileBackedTasksManager {
 
     @Override
     public void load() {
-        try {  // Task load
+        try {
             List<Task> tasks = gson.fromJson(kvTaskClient.load("task"),
                     new TypeToken<List<Task>>() {
                     }.getType());
@@ -48,7 +48,7 @@ public class HttpTaskManager extends FileBackedTasksManager {
             System.out.println("Список сохраненных задач пуст");
         }
 
-        try {  //Epic load
+        try {
             List<Epic> epics = gson.fromJson(kvTaskClient.load("epic"),
                     new TypeToken<List<Epic>>(){}.getType());
 
@@ -59,7 +59,7 @@ public class HttpTaskManager extends FileBackedTasksManager {
             System.out.println("Список сохраненных эпиков пуст");
         }
 
-        try {  //Subtask load
+        try {
             List<Subtask> subtasks = gson.fromJson(kvTaskClient.load("subtask"),
                     new TypeToken<List<Subtask>>(){}.getType());
             for (Subtask subtask : subtasks) {
@@ -68,7 +68,7 @@ public class HttpTaskManager extends FileBackedTasksManager {
         } catch (NullPointerException e) {
             System.out.println("Список сохраненных подзадач пуст");
         }
-        try {  //History load
+        try {
             List<Task> history = gson.fromJson(kvTaskClient.load("history"),
                     new TypeToken<List<Task>>(){}.getType());
             for (Task task : history) {
