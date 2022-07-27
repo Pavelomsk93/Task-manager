@@ -16,15 +16,17 @@ import java.util.List;
 
 public class HttpTaskManager extends FileBackedTasksManager {
 
-    private final KVTaskClient kvTaskClient = new KVTaskClient("http://localhost:8078");
+    private final KVTaskClient kvTaskClient ;
     Gson gson = new GsonBuilder()
             .setPrettyPrinting()
             .registerTypeAdapter(LocalDateTime.class,new LocalDateTimeAdapter())
             .create();
+    String url;
 
-    public HttpTaskManager()  {
+    public HttpTaskManager(String url)  {
+        this.url = url;
+        kvTaskClient = new KVTaskClient(url);
         load();
-
     }
 
     @Override

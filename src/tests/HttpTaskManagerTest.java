@@ -1,13 +1,11 @@
 import com.google.gson.Gson;
 
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tracker.adapters.LocalDateTimeAdapter;
-import tracker.client.KVTaskClient;
-import tracker.controllers.FileBackedTasksManager;
+import tracker.controllers.Managers;
 import tracker.model.Epic;
 import tracker.model.Subtask;
 import tracker.model.Task;
@@ -22,7 +20,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.List;
+
 
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,7 +39,7 @@ public class HttpTaskManagerTest {
 
     @BeforeEach
     public void startServer() throws IOException {
-        kvServer = new KVServer();
+        kvServer = Managers.getDefaultKVServer();
         kvServer.start();
         server = new HttpTaskServer();
         server.start();

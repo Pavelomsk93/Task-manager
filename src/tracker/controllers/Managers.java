@@ -1,9 +1,9 @@
 package tracker.controllers;
 
-import java.io.File;
+
+import tracker.servers.KVServer;
+
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 public class Managers {
 
@@ -12,6 +12,10 @@ public class Managers {
     }
 
     public static TaskManager getDefault() {
-        return new HttpTaskManager();
+        return new HttpTaskManager("http://localhost:8078");
+    }
+
+    public static KVServer  getDefaultKVServer() throws IOException {
+        return new KVServer();
     }
 }

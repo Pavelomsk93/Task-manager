@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        KVServer kvServer = new KVServer();
+        KVServer kvServer = Managers.getDefaultKVServer();
         kvServer.start();
         HttpTaskServer taskServer = new HttpTaskServer();
         taskServer.start();
