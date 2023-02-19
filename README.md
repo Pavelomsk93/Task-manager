@@ -32,30 +32,40 @@
 Программа написана на Java. Пример кода:
 
 ```java
-package manager;
 
-import manager.history.InMemoryHistoryManager;
-import manager.interfaceClass.HistoryManager;
-import manager.interfaceClass.TaskManager;
-import manager.taskManager.InMemoryTaskManager;
+package tracker.controllers;
 
-public class Managers {
 
-    public static TaskManager getDefault() {
-        return new InMemoryTaskManager();
+import tracker.modelParametrs.StatusTask;
+import tracker.model.Epic;
+import tracker.model.Subtask;
+import tracker.model.Task;
+import tracker.exceptions.ManagerSaveException;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+
+public class FileBackedTasksManager extends InMemoryTaskManager  {
+
+    private final File file;
+    private final static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy;HH:mm");
+
+    public FileBackedTasksManager(File file) {
+        this.file = file;
     }
+    public FileBackedTasksManager(){this.file = null;}
 
-    public static HistoryManager getHistoryDefault() {
-        return new InMemoryHistoryManager();
+
+    @Override
+    public int createTask(Task task) {
+        int id =super.createTask(task);
+        save();
+        return id;
     }
-}
-....
-//Получение задачи по индексу
-public Task getTask(long id) {
-   Task task = userTasks.get(id);
-    if (task != null) {
-        inMemoryHistoryManager.add(task);
-    }
-    return task;
-}
 ```
